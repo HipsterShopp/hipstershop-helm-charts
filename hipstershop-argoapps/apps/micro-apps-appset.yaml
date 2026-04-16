@@ -1,0 +1,85 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: micro-apps
+  namespace: argocd
+spec:
+  # ── Generator: defines the matrix of services to create Applications for ────
+  # Each element becomes one ArgoCD Application.
+  # adservice is excluded — it has its own Application (CI-driven tag update).
+  generators:
+    - list:
+        elements:
+          - name: assistantservice
+            namespace: hipster-backend
+          - name: authservice
+            namespace: hipster-backend
+          - name: cartservice
+            namespace: hipster-backend
+          - name: checkoutservice
+            namespace: hipster-backend
+          - name: currencyservice
+            namespace: hipster-backend
+          - name: emailservice
+            namespace: hipster-backend
+          - name: frontend
+            namespace: hipster-frontend   # frontend lives in its own namespace
+          - name: paymentservice
+            namespace: hipster-backend
+          - name: productcatalogservice
+            namespace: hipster-backend
+          - name: recommendationservice
+            namespace: hipster-backend
+          - name: shippingservice
+            namespace: hipster-backend
+
+  # ── Template: stamped once per element above ─────────────────────────────
+  template:
+    metadata:
+      name: "{{name}}"
+      namespace: argocd
+      annotations:
+        # Wave 3 — all micro-apps deploy after infra (waves 0–2)
+        argocd.argoproj.io/sync-wave: "3"
+
+        # ── ArgoCD Image Updater ─────────────────────────────────────────────
+        # Polls Docker Hub for a new semver tag and writes it back to git.
+        # Alias "app" is used so annotation KEYS stay static (only values use {{name}}).
+        #
+        # REQUIREMENT: Each service's values.yaml must have:
+        #   global.images.<service>.repository: clustersix0ps/hipstershop-<service>
+        #   global.images.<service>.tag: <current-tag>
+        # And the deployment template must use:
+        #   image: {{ .Values.global.images.<service>.repository }}:{{ .Values.global.images.<service>.tag }}
+        argocd-image-updater.argoproj.io/image-list: "app=clustersix0ps/hipstershop-{{name}}"
+        argocd-image-updater.argoproj.io/app.update-strategy: semver
+        argocd-image-updater.argoproj.io/write-back-method: git
+        argocd-image-updater.argoproj.io/git-branch: main
+        argocd-image-updater.argoproj.io/app.helm.image-name: "global.images.{{name}}.repository"
+        argocd-image-updater.argoproj.io/app.helm.image-tag:  "global.images.{{name}}.tag"
+
+      finalizers:
+        - resources-finalizer.argocd.argoproj.io
+
+    spec:
+      project: hipstershop
+
+      source:
+        repoURL: https://github.com/HipsterShopp/hipstershop-helm-charts
+        targetRevision: main
+        path: "hipstershop-micro-apps/{{name}}"
+        helm:
+          valueFiles:
+            - values.yaml
+
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: "{{namespace}}"
+
+      syncPolicy:
+        automated:
+          selfHeal: true
+          prune: true
+        syncOptions:
+          - CreateNamespace=false
+          - ServerSideApply=true

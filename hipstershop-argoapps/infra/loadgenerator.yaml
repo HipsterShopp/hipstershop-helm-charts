@@ -1,0 +1,33 @@
+# ── loadgenerator is DISABLED ─────────────────────────────────────────────────
+# Uncomment the block below and apply when you want to run a load test.
+# kubectl apply -f hipstershop-argoapps/infra/loadgenerator.yaml
+# ──────────────────────────────────────────────────────────────────────────────
+
+# apiVersion: argoproj.io/v1alpha1
+# kind: Application
+# metadata:
+#   name: loadgenerator
+#   namespace: argocd
+#   annotations:
+#     argocd.argoproj.io/sync-wave: "4"
+#   finalizers:
+#     - resources-finalizer.argocd.argoproj.io
+# spec:
+#   project: hipstershop
+#   source:
+#     repoURL: https://github.com/HipsterShopp/hipstershop-helm-charts
+#     targetRevision: main
+#     path: hipstershop-infra/loadgenerator
+#     helm:
+#       valueFiles:
+#         - values.yaml
+#   destination:
+#     server: https://kubernetes.default.svc
+#     namespace: hipster-frontend
+#   syncPolicy:
+#     automated:
+#       selfHeal: true
+#       prune: true
+#     syncOptions:
+#       - CreateNamespace=false
+#       - ServerSideApply=true

@@ -5,7 +5,7 @@ global:
   images:
     adservice:
       repository: clustersix0ps/hipstershop-adservice
-      tag: latest   
+      tag: adservice-v0.1.1
 
   replicas:
     adservice: 1

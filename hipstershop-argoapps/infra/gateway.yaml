@@ -1,0 +1,43 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gateway
+  namespace: argocd
+  annotations:
+    # Wave 2 — runs after hipster-backend namespace exists (backend-common wave 0)
+    argocd.argoproj.io/sync-wave: "2"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: hipstershop
+
+  source:
+    repoURL: https://github.com/HipsterShopp/hipstershop-helm-charts
+    targetRevision: main
+    path: hipstershop-infra/gateway
+    helm:
+      valueFiles:
+        - values.yaml
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: hipster-backend   # Gateway resource lives here; GatewayClass is cluster-scoped
+
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+    syncOptions:
+      - CreateNamespace=false
+      - ServerSideApply=true   # required for Gateway API CRDs
+
+  # GatewayClass is cluster-scoped and uses `lookup` in the chart template.
+  # ArgoCD may show a diff on the GatewayClass if it already exists (created by kgateway).
+  # ignoreDifferences prevents false OutOfSync status on cluster-owned resources.
+  ignoreDifferences:
+    - group: gateway.networking.k8s.io
+      kind: GatewayClass
+      jsonPointers:
+        - /metadata/annotations
+        - /metadata/labels
+        - /spec/parametersRef

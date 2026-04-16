@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: backend-common
+  namespace: argocd
+  annotations:
+    # Wave 0 — runs alongside mongodb; creates hipster-backend namespace + ConfigMaps
+    argocd.argoproj.io/sync-wave: "0"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: hipstershop
+
+  source:
+    repoURL: https://github.com/HipsterShopp/hipstershop-helm-charts
+    targetRevision: main
+    path: hipstershop-infra/backend-common
+    helm:
+      valueFiles:
+        - values.yaml
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: hipster-backend   # default ns; chart's namespace.yaml creates it
+
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: false   # ConfigMaps and Secrets — safe to leave prune off
+    syncOptions:
+      - CreateNamespace=false
+      - ServerSideApply=true

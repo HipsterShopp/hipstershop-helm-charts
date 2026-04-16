@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mongodb
+  namespace: argocd
+  annotations:
+    # Wave 0 — first thing to deploy: creates hipster-database namespace + MongoDB
+    argocd.argoproj.io/sync-wave: "0"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: hipstershop
+
+  source:
+    repoURL: https://github.com/HipsterShopp/hipstershop-helm-charts
+    targetRevision: main
+    path: hipstershop-infra/mongodb
+    helm:
+      valueFiles:
+        - values.yaml
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: hipster-database   # default ns; chart's namespace.yaml creates it
+
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: false   # NEVER auto-prune a stateful database
+    syncOptions:
+      - CreateNamespace=false   # chart manages its own namespace
+      - ServerSideApply=true

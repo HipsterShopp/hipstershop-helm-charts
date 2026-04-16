@@ -1,0 +1,19 @@
+
+global:
+  namespaces:
+    frontend: hipster-frontend
+
+  images:
+    loadgenerator: busybox:1.36
+
+  replicas:
+    loadgenerator: 1
+
+  resources:
+    standard:
+      requests:
+        cpu: 50m
+        memory: 32Mi
+      limits:
+        cpu: 100m
+        memory: 64Mi

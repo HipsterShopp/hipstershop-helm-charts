@@ -8,7 +8,7 @@ global:
     backend: hipster-backend
 
   images:
-    recommendationservice: "cazzzzz/hipstershop-recommendationservice:latest"   # CI overwrites the tag
+    recommendationservice: "yampss/hipstershop-recommendationservice:latest"   # CI overwrites the tag
 
   replicas:
     recommendationservice: 1

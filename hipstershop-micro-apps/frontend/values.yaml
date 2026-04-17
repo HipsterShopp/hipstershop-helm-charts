@@ -10,8 +10,13 @@ global:
     frontend: hipster-frontend
     backend:  hipster-backend
 
+  # JWT secret for the frontend app-secrets Secret in hipster-frontend namespace.
+  # Must match the value in backend-common/values.yaml (or use Sealed Secrets).
+  secrets:
+    jwtSecret: "team4hipstershopsecret"
+
   images:
-    frontend: "cazzzzz/hipstershop-frontend:latest"   # CI overwrites the tag
+    frontend: "yampss/hipstershop-frontend:latest"   # CI overwrites the tag
 
   replicas:
     frontend: 1

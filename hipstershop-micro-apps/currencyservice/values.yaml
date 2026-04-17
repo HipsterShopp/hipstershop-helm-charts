@@ -7,7 +7,7 @@ global:
     backend: hipster-backend
 
   images:
-    currencyservice: "cazzzzz/hipstershop-currencyservice:latest"   # CI overwrites the tag
+    currencyservice: "yampss/hipstershop-currencyservice:latest"   # CI overwrites the tag
 
   replicas:
     currencyservice: 1

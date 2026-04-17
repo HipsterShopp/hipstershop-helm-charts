@@ -7,7 +7,7 @@ global:
     backend: hipster-backend
 
   images:
-    assistantservice: "cazzzzz/hipstershop-assistantservice:latest"   # CI overwrites the tag
+    assistantservice: "yampss/hipstershop-assistantservice:latest"   # CI overwrites the tag
 
   replicas:
     assistantservice: 1

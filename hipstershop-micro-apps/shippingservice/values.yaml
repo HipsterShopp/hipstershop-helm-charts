@@ -7,7 +7,7 @@ global:
     backend: hipster-backend
 
   images:
-    shippingservice: "cazzzzz/hipstershop-shippingservice:latest"   # CI overwrites the tag
+    shippingservice: "yampss/hipstershop-shippingservice:latest"   # CI overwrites the tag
 
   replicas:
     shippingservice: 1

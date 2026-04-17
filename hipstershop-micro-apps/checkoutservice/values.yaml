@@ -9,7 +9,7 @@ global:
     database: hipster-database
 
   images:
-    checkoutservice: "cazzzzz/hipstershop-checkoutservice:latest"   # CI overwrites the tag
+    checkoutservice: "yampss/hipstershop-checkoutservice:latest"   # CI overwrites the tag
 
   replicas:
     checkoutservice: 1

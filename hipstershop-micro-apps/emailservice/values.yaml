@@ -7,7 +7,7 @@ global:
     backend: hipster-backend
 
   images:
-    emailservice: "cazzzzz/hipstershop-emailservice:latest"   # CI overwrites the tag
+    emailservice: "yampss/hipstershop-emailservice:latest"   # CI overwrites the tag
 
   replicas:
     emailservice: 1

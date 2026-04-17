@@ -7,7 +7,7 @@ global:
     backend: hipster-backend
 
   images:
-    productcatalogservice: "cazzzzz/hipstershop-productcatalogservice:latest"   # CI overwrites the tag
+    productcatalogservice: "yampss/hipstershop-productcatalogservice:latest"   # CI overwrites the tag
 
   replicas:
     productcatalogservice: 1

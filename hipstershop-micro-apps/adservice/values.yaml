@@ -4,7 +4,7 @@ global:
 
   images:
     adservice:
-      repository: clustersix0ps/hipstershop-adservice
+      repository: yampss/hipstershop-adservice
       tag: adservice-v0.1.1
 
   replicas:

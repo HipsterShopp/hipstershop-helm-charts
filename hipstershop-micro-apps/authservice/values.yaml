@@ -10,7 +10,7 @@ global:
     database: hipster-database
 
   images:
-    authservice: "cazzzzz/hipstershop-authservice:latest"   # CI overwrites the tag
+    authservice: "yampss/hipstershop-authservice:latest"   # CI overwrites the tag
     mongodb:     mongo:7.0                                  # used by init-container
 
   replicas:

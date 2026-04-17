@@ -67,7 +67,9 @@ spec:
             cpu: {{ .Values.global.resources.mongodb.limits.cpu }}
             memory: {{ .Values.global.resources.mongodb.limits.memory }}
   volumeClaimTemplates:
-  - metadata:
+  - apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
       name: mongo-data
     spec:
       accessModes: ["ReadWriteOnce"]

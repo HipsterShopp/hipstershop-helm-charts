@@ -31,11 +31,29 @@ spec:
         - configMapRef:
             name: hipster-config
         env:
+        - name: SMTP_HOST
+          value: "smtp.gmail.com"
+        - name: SMTP_PORT
+          value: "587"
+        - name: EMAIL_FROM
+          value: "HipsterShop"
         - name: PORT
           valueFrom:
             configMapKeyRef:
               name: service-ports
               key: EMAILSERVICE_PORT
+        - name: SMTP_USER
+          value: "jayabaaskar@gmail.com"
+          # valueFrom:
+          #   secretKeyRef:
+          #     name: app-secrets
+          #     key: SMTP_USER
+        - name: SMTP_PASSWORD
+          value: "moefitmyxbruudot"
+          # valueFrom:
+          #   secretKeyRef:
+          #     name: app-secrets
+          #     key: SMTP_PASSWORD
         - name: MONGO_USERNAME
           valueFrom:
             secretKeyRef:

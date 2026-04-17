@@ -1,0 +1,180 @@
+========================================================
+ SEALED SECRETS — SETUP STEPS
+ HipsterShop Platform
+========================================================
+
+OVERVIEW
+--------
+Sealed Secrets encrypts your Kubernetes Secrets with your
+cluster's RSA key. The encrypted files are safe to commit
+to git. The controller decrypts them inside the cluster.
+
+You need to do this ONCE per cluster. If you rebuild the
+cluster, repeat from Step 1.
+
+
+========================================================
+STEP 1 — Install the sealed-secrets controller in your cluster
+========================================================
+
+Run from any machine that has kubectl pointing at your cluster:
+
+  helm repo add sealed-secrets https://bitnami-labs.github.io/sealed-secrets
+  helm repo update
+  helm install sealed-secrets sealed-secrets/sealed-secrets \
+    --namespace kube-system \
+    --set fullnameOverride=sealed-secrets-controller
+
+Verify it is running:
+
+  kubectl get pods -n kube-system | grep sealed-secrets
+
+You should see something like:
+  sealed-secrets-controller-xxxx   1/1   Running
+
+
+========================================================
+STEP 2 — Install kubeseal CLI on your machine (Linux/WSL)
+========================================================
+
+Run inside WSL (Windows Subsystem for Linux) or Git Bash:
+
+  KUBESEAL_VERSION=$(curl -s https://api.github.com/repos/bitnami-labs/sealed-secrets/releases/latest \
+    | grep tag_name | cut -d '"' -f 4 | sed 's/v//')
+
+  curl -sL "https://github.com/bitnami-labs/sealed-secrets/releases/download/v${KUBESEAL_VERSION}/kubeseal-${KUBESEAL_VERSION}-linux-amd64.tar.gz" | tar xz
+
+  sudo install -m 755 kubeseal /usr/local/bin/
+
+Verify:
+  kubeseal --version
+
+
+========================================================
+STEP 3 — Create the namespaces BEFORE generating secrets
+========================================================
+
+kubeseal encrypts secrets with a specific namespace baked in.
+The namespaces must exist at generate time, OR you can create
+them manually right now:
+
+  kubectl create namespace hipster-backend  --dry-run=client -o yaml | kubectl apply -f -
+  kubectl create namespace hipster-database --dry-run=client -o yaml | kubectl apply -f -
+
+(The --dry-run + apply pattern is safe to run even if they exist.)
+
+
+========================================================
+STEP 4 — Run the generate script (from WSL/Git Bash)
+========================================================
+
+Navigate to the sealed-secrets folder inside your helm-charts repo:
+
+  cd /mnt/c/Users/chris/Desktop/hipstershop-helm-charts/sealed-secrets
+
+Set your real secret values as environment variables
+(replace the placeholder values with your actual passwords):
+
+  export JWT_SECRET="team4hipstershopsecret"
+  export GEMINI_API_KEY="your-real-gemini-api-key"
+  export MONGO_ROOT_PASSWORD="your-real-mongo-root-password"
+  export AUTH_PASS="your-auth-password"
+  export CART_PASS="your-cart-password"
+  export CATALOG_PASS="your-catalog-password"
+  export ORDER_PASS="your-order-password"
+  export PAYMENT_PASS="your-payment-password"
+  export NOTIFICATION_PASS="your-notification-password"
+  export ANALYTICS_PASS="your-analytics-password"
+
+Run the script:
+
+  bash generate-sealed-secrets.sh
+
+It will create/overwrite:
+  sealed-secrets/backend-common-secrets.yaml  <- encrypted, safe to commit
+  sealed-secrets/mongodb-secrets.yaml         <- encrypted, safe to commit
+  sealed-secrets/pub-cert.pem                 <- DO NOT COMMIT (blocked by .gitignore)
+
+
+========================================================
+STEP 5 — Commit and push the generated files
+========================================================
+
+  cd /mnt/c/Users/chris/Desktop/hipstershop-helm-charts
+
+  git add sealed-secrets/backend-common-secrets.yaml
+  git add sealed-secrets/mongodb-secrets.yaml
+  git add sealed-secrets/generate-sealed-secrets.sh
+  git add sealed-secrets/.gitignore
+
+  git commit -m "chore: add sealed secrets"
+  git push origin feature/helm-charts
+
+
+========================================================
+STEP 6 — Apply ArgoCD manifests in order
+========================================================
+
+Make sure kubectl is pointing at your cluster:
+  kubectl config current-context
+
+Apply in this exact order and WAIT for each to sync before next:
+
+--- WAVE 0 (run together) ---
+  kubectl apply -f hipstershop-argoapps/project.yaml
+  kubectl apply -f hipstershop-argoapps/infra/mongodb.yaml
+  kubectl apply -f hipstershop-argoapps/infra/backend-common.yaml
+
+  Wait until both mongodb and backend-common show "Synced + Healthy" in ArgoCD UI.
+
+--- WAVE 1 ---
+  kubectl apply -f hipstershop-argoapps/infra/sealed-secrets.yaml
+
+  Wait until sealed-secrets shows "Synced + Healthy".
+  Then verify the Kubernetes Secrets were created:
+
+    kubectl get secret app-secrets    -n hipster-backend
+    kubectl get secret mongodb-root   -n hipster-backend
+    kubectl get secret mongodb-users  -n hipster-backend
+    kubectl get secret mongodb-root   -n hipster-database
+    kubectl get secret mongodb-users  -n hipster-database
+
+--- WAVE 2 ---
+  kubectl apply -f hipstershop-argoapps/infra/gateway.yaml
+
+--- WAVE 3 (run together) ---
+  kubectl apply -f hipstershop-argoapps/apps/adservice.yaml
+  kubectl apply -f hipstershop-argoapps/apps/micro-apps-appset.yaml
+
+
+========================================================
+STEP 7 — Access the ArgoCD UI (if not already exposed)
+========================================================
+
+  kubectl port-forward svc/argocd-server -n argocd 8080:443
+
+Open browser: https://localhost:8080
+Username: admin
+Password:
+  kubectl -n argocd get secret argocd-initial-admin-secret \
+    -o jsonpath="{.data.password}" | base64 -d
+
+
+========================================================
+NOTES
+========================================================
+
+- The sealed-secrets YAML files are cluster-specific.
+  If you rebuild the cluster, re-run generate-sealed-secrets.sh.
+
+- pub-cert.pem is ignored by .gitignore — never commit it.
+
+- The password values you export in Step 4 are never stored
+  anywhere except your terminal session. They are gone when
+  you close the terminal.
+
+- To update a secret later, change the env var and re-run
+  generate-sealed-secrets.sh, then commit and push.
+  ArgoCD + the controller will update the Secret automatically.
+
+========================================================

@@ -45,5 +45,14 @@ global:
         password: analytics_password
         database: analytics_db
 
+  resources:
+    mongodb:
+      requests:
+        cpu: 250m
+        memory: 512Mi
+      limits:
+        cpu: 500m
+        memory: 1Gi
+
   networkPolicy:
     vpcCidr: "172.31.0.0/16"

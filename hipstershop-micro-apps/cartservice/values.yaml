@@ -9,7 +9,7 @@ global:
     database: hipster-database
 
   images:
-    cartservice: "cazzzzz/hipstershop-cartservice:latest"   # CI overwrites the tag
+    cartservice: "yampss/hipstershop-cartservice:latest"   # CI overwrites the tag
     mongodb:     mongo:7.0                                  # used by init-container
 
   replicas:

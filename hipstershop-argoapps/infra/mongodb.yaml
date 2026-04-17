@@ -30,3 +30,15 @@ spec:
     syncOptions:
       - CreateNamespace=false   # chart manages its own namespace
       - ServerSideApply=true
+      - RespectIgnoreDifferences=true   # honour ignoreDifferences during sync too
+
+  # Kubernetes auto-defaults these StatefulSet fields after apply.
+  # Without this block ArgoCD sees permanent drift and loops on self-heal.
+  ignoreDifferences:
+    - group: apps
+      kind: StatefulSet
+      name: mongodb
+      jsonPointers:
+        - /spec/persistentVolumeClaimRetentionPolicy
+        - /spec/revisionHistoryLimit
+        - /spec/updateStrategy

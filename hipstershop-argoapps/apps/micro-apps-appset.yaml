@@ -47,11 +47,11 @@ spec:
         # Alias "app" is used so annotation KEYS stay static (only values use {{name}}).
         #
         # REQUIREMENT: Each service's values.yaml must have:
-        #   global.images.<service>.repository: clustersix0ps/hipstershop-<service>
+        #   global.images.<service>.repository: yampss/hipstershop-<service>
         #   global.images.<service>.tag: <current-tag>
         # And the deployment template must use:
         #   image: {{ .Values.global.images.<service>.repository }}:{{ .Values.global.images.<service>.tag }}
-        argocd-image-updater.argoproj.io/image-list: "app=clustersix0ps/hipstershop-{{name}}"
+        argocd-image-updater.argoproj.io/image-list: "app=yampss/hipstershop-{{name}}"
         argocd-image-updater.argoproj.io/app.update-strategy: semver
         argocd-image-updater.argoproj.io/write-back-method: git
         argocd-image-updater.argoproj.io/git-branch: main

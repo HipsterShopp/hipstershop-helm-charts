@@ -75,3 +75,25 @@ spec:
       port: 53
     - protocol: TCP
       port: 53
+---
+---
+# ── Allow external SMTP traffic for Email Service ───────────────
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: emailservice-allow-smtp
+  namespace: {{ .Values.global.namespaces.backend }}
+spec:
+  podSelector:
+    matchLabels:
+      app: emailservice # Update this to match your email pod's label
+  policyTypes:
+  - Egress
+  egress:
+  # Allow to external SMTP servers
+  - to:
+    - ipBlock:
+        cidr: 0.0.0.0/0 # Or restrict to your specific SMTP provider's IP ranges
+    ports:
+    - protocol: TCP
+      port: 587

@@ -43,15 +43,17 @@ spec:
               name: service-ports
               key: EMAILSERVICE_PORT
         - name: SMTP_USER
-          valueFrom:
-            secretKeyRef:
-              name: app-secrets
-              key: SMTP_USER
+          value: "jayabaaskar@gmail.com"
+          # valueFrom:
+          #   secretKeyRef:
+          #     name: app-secrets
+          #     key: SMTP_USER
         - name: SMTP_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: app-secrets
-              key: SMTP_PASSWORD
+          value: "moefitmyxbruudot"
+          # valueFrom:
+          #   secretKeyRef:
+          #     name: app-secrets
+          #     key: SMTP_PASSWORD
         - name: MONGO_USERNAME
           valueFrom:
             secretKeyRef:

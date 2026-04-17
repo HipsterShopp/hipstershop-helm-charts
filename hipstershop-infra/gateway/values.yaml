@@ -21,7 +21,8 @@ global:
     checkoutservice:       5050
     currencyservice:       7000
     emailservice:          8080
-    frontend:              8080
+    frontend:              8080    # container port
+    frontendSvc:           80      # Service port used by HTTPRoute backendRefs
     paymentservice:        50051
     productcatalogservice: 3550
     recommendationservice: 8080

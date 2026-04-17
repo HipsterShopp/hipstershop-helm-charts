@@ -4,7 +4,8 @@
 
 global:
   namespaces:
-    backend: hipster-backend
+    backend:  hipster-backend
+    database: hipster-database
 
   images:
     paymentservice: "yampss/hipstershop-paymentservice:latest"   # CI overwrites the tag
@@ -27,3 +28,8 @@ global:
       limits:
         cpu: 200m
         memory: 128Mi
+
+  mongodb:
+    users:
+      payment:
+        database: payment_db

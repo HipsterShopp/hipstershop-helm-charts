@@ -4,7 +4,8 @@
 
 global:
   namespaces:
-    backend: hipster-backend
+    backend:  hipster-backend
+    database: hipster-database
 
   images:
     emailservice: "yampss/hipstershop-emailservice:latest"   # CI overwrites the tag
@@ -27,3 +28,8 @@ global:
       limits:
         cpu: 200m
         memory: 128Mi
+
+  mongodb:
+    users:
+      notification:
+        database: notification_db

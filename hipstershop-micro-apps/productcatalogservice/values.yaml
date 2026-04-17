@@ -4,7 +4,8 @@
 
 global:
   namespaces:
-    backend: hipster-backend
+    backend:  hipster-backend
+    database: hipster-database
 
   images:
     productcatalogservice: "yampss/hipstershop-productcatalogservice:latest"   # CI overwrites the tag
@@ -27,3 +28,9 @@ global:
       limits:
         cpu: 200m
         memory: 128Mi
+
+  mongodb:
+    users:
+      catalog:
+        database: catalog_db
+

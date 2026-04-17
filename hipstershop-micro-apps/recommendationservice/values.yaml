@@ -5,7 +5,8 @@
 
 global:
   namespaces:
-    backend: hipster-backend
+    backend:  hipster-backend
+    database: hipster-database
 
   images:
     recommendationservice: "yampss/hipstershop-recommendationservice:latest"   # CI overwrites the tag
@@ -28,3 +29,8 @@ global:
       limits:
         cpu: 200m
         memory: 450Mi
+
+  mongodb:
+    users:
+      analytics:
+        database: analytics_db

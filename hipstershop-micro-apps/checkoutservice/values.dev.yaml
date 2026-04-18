@@ -9,4 +9,4 @@ global:
       requests: { cpu: 50m, memory: 64Mi }
       limits:   { cpu: 100m, memory: 128Mi }
   images:
-    checkoutservice: "yampss/hipstershop-checkoutservice:develop-latest"
+    checkoutservice: "yampss/hipstershop-checkoutservice:develop-b3ec50c7"

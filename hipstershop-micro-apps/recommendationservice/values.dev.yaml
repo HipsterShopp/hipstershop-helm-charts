@@ -9,4 +9,4 @@ global:
       requests: { cpu: 50m,  memory: 110Mi }
       limits:   { cpu: 100m, memory: 225Mi }
   images:
-    recommendationservice: "yampss/hipstershop-recommendationservice:develop-latest"
+    recommendationservice: "yampss/hipstershop-recommendationservice:develop-c5996adb"

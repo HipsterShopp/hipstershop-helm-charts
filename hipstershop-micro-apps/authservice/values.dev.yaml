@@ -1,0 +1,12 @@
+# ─────────────────────────────────────────────────────────────
+#  authservice — dev overrides
+# ─────────────────────────────────────────────────────────────
+global:
+  replicas:
+    authservice: 1
+  resources:
+    standard:
+      requests: { cpu: 50m, memory: 64Mi }
+      limits:   { cpu: 100m, memory: 128Mi }
+  images:
+    authservice: "yampss/hipstershop-authservice:develop-latest"

@@ -1,0 +1,12 @@
+# ─────────────────────────────────────────────────────────────
+#  recommendationservice — prod overrides
+# ─────────────────────────────────────────────────────────────
+global:
+  replicas:
+    recommendationservice: 2
+  resources:
+    recommendation:
+      requests: { cpu: 100m, memory: 220Mi }
+      limits:   { cpu: 200m, memory: 450Mi }
+  images:
+    recommendationservice: "yampss/hipstershop-recommendationservice:latest"

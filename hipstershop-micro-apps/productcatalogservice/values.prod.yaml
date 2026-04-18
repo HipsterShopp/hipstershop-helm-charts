@@ -1,0 +1,12 @@
+# ─────────────────────────────────────────────────────────────
+#  productcatalogservice — prod overrides
+# ─────────────────────────────────────────────────────────────
+global:
+  replicas:
+    productcatalogservice: 2
+  resources:
+    standard:
+      requests: { cpu: 100m, memory: 128Mi }
+      limits:   { cpu: 200m, memory: 256Mi }
+  images:
+    productcatalogservice: "yampss/hipstershop-productcatalogservice:latest"

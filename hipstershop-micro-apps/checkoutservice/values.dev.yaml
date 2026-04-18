@@ -1,0 +1,12 @@
+# ─────────────────────────────────────────────────────────────
+#  checkoutservice — dev overrides
+# ─────────────────────────────────────────────────────────────
+global:
+  replicas:
+    checkoutservice: 1
+  resources:
+    standard:
+      requests: { cpu: 50m, memory: 64Mi }
+      limits:   { cpu: 100m, memory: 128Mi }
+  images:
+    checkoutservice: "yampss/hipstershop-checkoutservice:develop-latest"

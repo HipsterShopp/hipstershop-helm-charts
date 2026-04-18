@@ -1,0 +1,20 @@
+# ─────────────────────────────────────────────────────────────
+#  adservice — prod overrides
+#  Replicas: 2  |  Image: managed by ArgoCD Image Updater (semver tags)
+# ─────────────────────────────────────────────────────────────
+global:
+  replicas:
+    adservice: 2
+
+  resources:
+    adservice:
+      requests:
+        cpu: 200m
+        memory: 180Mi
+      limits:
+        cpu: 300m
+        memory: 512Mi
+
+  # Fallback tag — Image Updater overwrites via .argocd-source-adservice-prod.yaml
+  images:
+    adservice: "yampss/hipstershop-adservice:latest"

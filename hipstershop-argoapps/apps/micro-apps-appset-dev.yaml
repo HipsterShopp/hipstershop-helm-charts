@@ -1,0 +1,56 @@
+# ─────────────────────────────────────────────────────────────
+#  micro-apps-appset-dev.yaml
+#  Deploy to: DEV cluster (friend's cluster)
+#  Tracks:    develop branch of hipstershop-helm-charts
+#  Apply to dev cluster: kubectl apply -f this file -n argocd
+# ─────────────────────────────────────────────────────────────
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: micro-apps-dev
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - { name: adservice,             namespace: hipster-backend }
+          - { name: authservice,           namespace: hipster-backend }
+          - { name: cartservice,           namespace: hipster-backend }
+          - { name: checkoutservice,       namespace: hipster-backend }
+          - { name: currencyservice,       namespace: hipster-backend }
+          - { name: emailservice,          namespace: hipster-backend }
+          - { name: frontend,              namespace: hipster-frontend }
+          - { name: paymentservice,        namespace: hipster-backend }
+          - { name: productcatalogservice, namespace: hipster-backend }
+          - { name: recommendationservice, namespace: hipster-backend }
+          - { name: shippingservice,       namespace: hipster-backend }
+          - { name: assistantservice,      namespace: hipster-backend }
+
+  template:
+    metadata:
+      name: '{{name}}-dev'
+      namespace: argocd
+
+    spec:
+      project: hipstershop
+
+      source:
+        repoURL: https://github.com/HipsterShopp/hipstershop-helm-charts
+        targetRevision: develop
+        path: 'hipstershop-micro-apps/{{name}}'
+        helm:
+          valueFiles:
+            - values.yaml
+            - values.dev.yaml
+
+      destination:
+        server: https://kubernetes.default.svc   # dev cluster's local API
+        namespace: '{{namespace}}'
+
+      syncPolicy:
+        automated:
+          selfHeal: true
+          prune: true          # dev cluster — prune stale resources
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true

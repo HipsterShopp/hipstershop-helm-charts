@@ -9,4 +9,4 @@ global:
       requests: { cpu: 50m, memory: 64Mi }
       limits:   { cpu: 100m, memory: 128Mi }
   images:
-    assistantservice: "yampss/hipstershop-assistantservice:develop-latest"
+    assistantservice: "yampss/hipstershop-assistantservice:develop-d075d486"

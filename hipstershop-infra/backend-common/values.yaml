@@ -1,13 +1,30 @@
 
+# ─────────────────────────────────────────────────────────────────────────────
+#  backend-common — base values
+#
+#  SECRET HANDLING FOR THE TEAM:
+#  This file contains placeholder values only ( REPLACE_WITH_* ).
+#  Real credentials are NEVER committed to git.
+#
+#  How to run locally or in a NEW cluster:
+#   1. Copy  values.secret.yaml.example  →  values.secret.yaml
+#   2. Fill in the real values in  values.secret.yaml
+#   3. values.secret.yaml is .gitignored — it will never be committed
+#
+#  In ArgoCD: create the Application with both value files:
+#    helm:
+#      valueFiles: [values.yaml, values.secret.yaml]
+#  OR pass overrides via ArgoCD UI (App Details → Parameters → Edit).
+# ─────────────────────────────────────────────────────────────────────────────
+
 global:
   namespaces:
     frontend: hipster-frontend
     backend:  hipster-backend
     database: hipster-database
 
-
   secrets:
-    jwtSecret:    "team4hipstershopsecret"
+    jwtSecret:    "REPLACE_WITH_JWT_SECRET"
     geminiApiKey: "REPLACE_WITH_GEMINI_API_KEY"
 
 
@@ -44,35 +61,35 @@ global:
 
   mongodb:
     rootUsername: admin
-    rootPassword: mongopassword
+    rootPassword: "REPLACE_WITH_MONGO_ROOT_PASSWORD"
     users:
       auth:
         username: auth_user
-        password: auth_password
+        password: "REPLACE_WITH_AUTH_MONGO_PASSWORD"
         database: auth_db
       cart:
         username: cart_user
-        password: cart_password
+        password: "REPLACE_WITH_CART_MONGO_PASSWORD"
         database: cart_db
       catalog:
         username: catalog_user
-        password: catalog_password
+        password: "REPLACE_WITH_CATALOG_MONGO_PASSWORD"
         database: catalog_db
       order:
         username: order_user
-        password: order_password
+        password: "REPLACE_WITH_ORDER_MONGO_PASSWORD"
         database: order_db
       payment:
         username: payment_user
-        password: payment_password
+        password: "REPLACE_WITH_PAYMENT_MONGO_PASSWORD"
         database: payment_db
       notification:
         username: notification_user
-        password: notification_password
+        password: "REPLACE_WITH_NOTIFICATION_MONGO_PASSWORD"
         database: notification_db
       analytics:
         username: analytics_user
-        password: analytics_password
+        password: "REPLACE_WITH_ANALYTICS_MONGO_PASSWORD"
         database: analytics_db
 
   mongodbConfig:

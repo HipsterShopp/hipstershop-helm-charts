@@ -21,12 +21,12 @@ spec:
 
   destination:
     server: https://kubernetes.default.svc
-    namespace: hipster-backend   # default ns; chart's namespace.yaml creates it
+    namespace: hipster-backend   
 
   syncPolicy:
     automated:
       selfHeal: true
-      prune: false   # ConfigMaps and Secrets — safe to leave prune off
+      prune: false   
     syncOptions:
       - CreateNamespace=false
       - ServerSideApply=true

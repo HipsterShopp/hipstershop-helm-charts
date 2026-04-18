@@ -1,38 +1,31 @@
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: adservice
-  namespace: argocd
-  annotations:
-    # Wave 3 — all micro-apps deploy after infra (waves 0-2)
-    argocd.argoproj.io/sync-wave: "3"
-    #
-    # NOTE: adservice does NOT use ArgoCD Image Updater.
-    # Image tag updates are driven by the CI pipeline:
-    #   hipstershop-adservice/.github/workflows/adservice.yaml
-    #   → push job → helm-updater-job (commits new tag to this repo)
-    #   → ArgoCD detects the git change → rolling update
-  finalizers:
-    - resources-finalizer.argocd.argoproj.io
-spec:
-  project: hipstershop
+# apiVersion: argoproj.io/v1alpha1
+# kind: Application
+# metadata:
+#   name: adservice
+#   namespace: argocd
+#   annotations:
+#     argocd.argoproj.io/sync-wave: "3"
+#   finalizers:
+#     - resources-finalizer.argocd.argoproj.io
+# spec:
+#   project: hipstershop
 
-  source:
-    repoURL: https://github.com/HipsterShopp/hipstershop-helm-charts
-    targetRevision: main
-    path: hipstershop-micro-apps/adservice
-    helm:
-      valueFiles:
-        - values.yaml
+#   source:
+#     repoURL: https://github.com/HipsterShopp/hipstershop-helm-charts
+#     targetRevision: main
+#     path: hipstershop-micro-apps/adservice
+#     helm:
+#       valueFiles:
+#         - values.yaml
 
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: hipster-backend
+#   destination:
+#     server: https://kubernetes.default.svc
+#     namespace: hipster-backend
 
-  syncPolicy:
-    automated:
-      selfHeal: true
-      prune: true
-    syncOptions:
-      - CreateNamespace=false
-      - ServerSideApply=true
+#   syncPolicy:
+#     automated:
+#       selfHeal: true
+#       prune: true
+#     syncOptions:
+#       - CreateNamespace=false
+#       - ServerSideApply=true

@@ -1,0 +1,12 @@
+# ─────────────────────────────────────────────────────────────
+#  authservice — prod overrides
+# ─────────────────────────────────────────────────────────────
+global:
+  replicas:
+    authservice: 2
+  resources:
+    standard:
+      requests: { cpu: 100m, memory: 128Mi }
+      limits:   { cpu: 200m, memory: 256Mi }
+  images:
+    authservice: "yampss/hipstershop-authservice:latest"

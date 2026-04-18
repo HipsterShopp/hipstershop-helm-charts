@@ -1,0 +1,16 @@
+# ─────────────────────────────────────────────────────────────
+#  frontend — prod overrides
+# ─────────────────────────────────────────────────────────────
+global:
+  replicas:
+    frontend: 2
+  hpa:
+    frontend:
+      minReplicas: 2
+      maxReplicas: 8
+  resources:
+    standard:
+      requests: { cpu: 100m, memory: 128Mi }
+      limits:   { cpu: 300m, memory: 512Mi }
+  images:
+    frontend: "yampss/hipstershop-frontend:latest"

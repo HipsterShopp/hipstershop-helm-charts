@@ -24,7 +24,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: {{ .Values.global.images.adservice.repository }}:{{ .Values.global.images.adservice.tag }}
+        image: {{ .Values.global.images.adservice }}
         ports:
         - containerPort: {{ .Values.global.ports.adservice }}
         envFrom:

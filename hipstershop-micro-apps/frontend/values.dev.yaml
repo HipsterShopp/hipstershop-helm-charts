@@ -1,0 +1,16 @@
+# ─────────────────────────────────────────────────────────────
+#  frontend — dev overrides
+# ─────────────────────────────────────────────────────────────
+global:
+  replicas:
+    frontend: 1
+  hpa:
+    frontend:
+      minReplicas: 1
+      maxReplicas: 3
+  resources:
+    standard:
+      requests: { cpu: 50m, memory: 64Mi }
+      limits:   { cpu: 150m, memory: 256Mi }
+  images:
+    frontend: "yampss/hipstershop-frontend:develop-latest"

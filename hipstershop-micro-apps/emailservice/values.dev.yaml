@@ -9,4 +9,4 @@ global:
       requests: { cpu: 50m, memory: 64Mi }
       limits:   { cpu: 100m, memory: 128Mi }
   images:
-    emailservice: "yampss/hipstershop-emailservice:develop-latest"
+    emailservice: "yampss/hipstershop-emailservice:develop-efa6f275"

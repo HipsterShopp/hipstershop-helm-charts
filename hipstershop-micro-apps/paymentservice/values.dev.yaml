@@ -9,4 +9,4 @@ global:
       requests: { cpu: 50m, memory: 64Mi }
       limits:   { cpu: 100m, memory: 128Mi }
   images:
-    paymentservice: "yampss/hipstershop-paymentservice:develop-latest"
+    paymentservice: "yampss/hipstershop-paymentservice:develop-bb339e6c"

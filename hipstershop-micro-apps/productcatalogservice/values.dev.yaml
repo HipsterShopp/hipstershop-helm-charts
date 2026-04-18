@@ -9,4 +9,4 @@ global:
       requests: { cpu: 50m, memory: 64Mi }
       limits:   { cpu: 100m, memory: 128Mi }
   images:
-    productcatalogservice: "yampss/hipstershop-productcatalogservice:develop-latest"
+    productcatalogservice: "yampss/hipstershop-productcatalogservice:develop-dc338aed"

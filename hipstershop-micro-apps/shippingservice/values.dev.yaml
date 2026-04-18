@@ -9,4 +9,4 @@ global:
       requests: { cpu: 50m, memory: 64Mi }
       limits:   { cpu: 100m, memory: 128Mi }
   images:
-    shippingservice: "yampss/hipstershop-shippingservice:develop-latest"
+    shippingservice: "yampss/hipstershop-shippingservice:develop-2474af03"

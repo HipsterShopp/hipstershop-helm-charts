@@ -13,4 +13,4 @@ global:
       requests: { cpu: 50m, memory: 64Mi }
       limits:   { cpu: 150m, memory: 256Mi }
   images:
-    frontend: "yampss/hipstershop-frontend:develop-latest"
+    frontend: "yampss/hipstershop-frontend:develop-6f396b27"

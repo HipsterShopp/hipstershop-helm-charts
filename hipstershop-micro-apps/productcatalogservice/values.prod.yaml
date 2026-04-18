@@ -3,7 +3,7 @@
 # ─────────────────────────────────────────────────────────────
 global:
   replicas:
-    productcatalogservice: 2
+    productcatalogservice: 1
   resources:
     standard:
       requests: { cpu: 100m, memory: 128Mi }

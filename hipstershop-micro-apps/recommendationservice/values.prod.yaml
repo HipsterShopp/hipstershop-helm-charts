@@ -3,7 +3,7 @@
 # ─────────────────────────────────────────────────────────────
 global:
   replicas:
-    recommendationservice: 2
+    recommendationservice: 1
   resources:
     recommendation:
       requests: { cpu: 100m, memory: 220Mi }

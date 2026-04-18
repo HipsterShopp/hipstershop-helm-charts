@@ -3,7 +3,7 @@
 # ─────────────────────────────────────────────────────────────
 global:
   replicas:
-    assistantservice: 2
+    assistantservice: 1
   resources:
     standard:
       requests: { cpu: 100m, memory: 128Mi }

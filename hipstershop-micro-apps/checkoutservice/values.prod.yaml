@@ -3,7 +3,7 @@
 # ─────────────────────────────────────────────────────────────
 global:
   replicas:
-    checkoutservice: 2
+    checkoutservice: 1
   resources:
     standard:
       requests: { cpu: 100m, memory: 128Mi }

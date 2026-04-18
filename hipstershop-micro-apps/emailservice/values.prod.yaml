@@ -3,7 +3,7 @@
 # ─────────────────────────────────────────────────────────────
 global:
   replicas:
-    emailservice: 2
+    emailservice: 1
   resources:
     standard:
       requests: { cpu: 100m, memory: 128Mi }

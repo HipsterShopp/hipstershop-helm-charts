@@ -3,7 +3,7 @@
 # ─────────────────────────────────────────────────────────────
 global:
   replicas:
-    currencyservice: 2
+    currencyservice: 1
   resources:
     standard:
       requests: { cpu: 100m, memory: 128Mi }

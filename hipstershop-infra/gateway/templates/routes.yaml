@@ -11,80 +11,109 @@ metadata:
     app: frontend
 spec:
   parentRefs:
-    - name: {{ $gw.name }}
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: {{ $gw.name }}
   rules:
     - matches:
         - path:
             type: PathPrefix
             value: /static/
       backendRefs:
-        - name: frontend
+        - group: ""
+          kind: Service
+          name: {{ .Values.global.frontendServiceName }}
           namespace: {{ $ns.frontend }}
           port: {{ $ports.frontendSvc }}
+          weight: 1
     - matches:
         - path:
             type: Exact
             value: /_healthz
       backendRefs:
-        - name: frontend
+        - group: ""
+          kind: Service
+          name: {{ .Values.global.frontendServiceName }}
           namespace: {{ $ns.frontend }}
           port: {{ $ports.frontendSvc }}
+          weight: 1
     - matches:
         - path:
             type: PathPrefix
             value: /product
       backendRefs:
-        - name: frontend
+        - group: ""
+          kind: Service
+          name: {{ .Values.global.frontendServiceName }}
           namespace: {{ $ns.frontend }}
           port: {{ $ports.frontendSvc }}
+          weight: 1
     - matches:
         - path:
             type: PathPrefix
             value: /cart
       backendRefs:
-        - name: frontend
+        - group: ""
+          kind: Service
+          name: {{ .Values.global.frontendServiceName }}
           namespace: {{ $ns.frontend }}
           port: {{ $ports.frontendSvc }}
+          weight: 1
     - matches:
         - path:
             type: Exact
             value: /setCurrency
       backendRefs:
-        - name: frontend
+        - group: ""
+          kind: Service
+          name: {{ .Values.global.frontendServiceName }}
           namespace: {{ $ns.frontend }}
           port: {{ $ports.frontendSvc }}
+          weight: 1
     - matches:
         - path:
             type: Exact
             value: /login
       backendRefs:
-        - name: frontend
+        - group: ""
+          kind: Service
+          name: {{ .Values.global.frontendServiceName }}
           namespace: {{ $ns.frontend }}
           port: {{ $ports.frontendSvc }}
+          weight: 1
     - matches:
         - path:
             type: Exact
             value: /signup
       backendRefs:
-        - name: frontend
+        - group: ""
+          kind: Service
+          name: {{ .Values.global.frontendServiceName }}
           namespace: {{ $ns.frontend }}
           port: {{ $ports.frontendSvc }}
+          weight: 1
     - matches:
         - path:
             type: Exact
             value: /logout
       backendRefs:
-        - name: frontend
+        - group: ""
+          kind: Service
+          name: {{ .Values.global.frontendServiceName }}
           namespace: {{ $ns.frontend }}
           port: {{ $ports.frontendSvc }}
+          weight: 1
     - matches:
         - path:
             type: Exact
             value: /
       backendRefs:
-        - name: frontend
+        - group: ""
+          kind: Service
+          name: {{ .Values.global.frontendServiceName }}
           namespace: {{ $ns.frontend }}
           port: {{ $ports.frontendSvc }}
+          weight: 1
 ---
 # ── Backend Service Routes ───────────────────────────────────────
 apiVersion: gateway.networking.k8s.io/v1
@@ -96,7 +125,9 @@ metadata:
     app: adservice
 spec:
   parentRefs:
-    - name: {{ $gw.name }}
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: {{ $gw.name }}
   rules:
     - matches:
         - path:
@@ -109,8 +140,11 @@ spec:
               type: ReplaceFullPath
               replaceFullPath: /ads
       backendRefs:
-        - name: adservice
+        - group: ""
+          kind: Service
+          name: adservice
           port: {{ $ports.adservice }}
+          weight: 1
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -121,7 +155,9 @@ metadata:
     app: authservice
 spec:
   parentRefs:
-    - name: {{ $gw.name }}
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: {{ $gw.name }}
   rules:
     - matches:
         - path:
@@ -134,8 +170,11 @@ spec:
               type: ReplaceFullPath
               replaceFullPath: /login
       backendRefs:
-        - name: authservice
+        - group: ""
+          kind: Service
+          name: authservice
           port: {{ $ports.authservice }}
+          weight: 1
     - matches:
         - path:
             type: Exact
@@ -147,8 +186,11 @@ spec:
               type: ReplaceFullPath
               replaceFullPath: /signup
       backendRefs:
-        - name: authservice
+        - group: ""
+          kind: Service
+          name: authservice
           port: {{ $ports.authservice }}
+          weight: 1
     - matches:
         - path:
             type: Exact
@@ -160,8 +202,11 @@ spec:
               type: ReplaceFullPath
               replaceFullPath: /logout
       backendRefs:
-        - name: authservice
+        - group: ""
+          kind: Service
+          name: authservice
           port: {{ $ports.authservice }}
+          weight: 1
     - matches:
         - path:
             type: Exact
@@ -173,8 +218,11 @@ spec:
               type: ReplaceFullPath
               replaceFullPath: /me
       backendRefs:
-        - name: authservice
+        - group: ""
+          kind: Service
+          name: authservice
           port: {{ $ports.authservice }}
+          weight: 1
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -185,7 +233,9 @@ metadata:
     app: cartservice
 spec:
   parentRefs:
-    - name: {{ $gw.name }}
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: {{ $gw.name }}
   rules:
     - matches:
         - path:
@@ -198,8 +248,11 @@ spec:
               type: ReplacePrefixMatch
               replacePrefixMatch: /cart
       backendRefs:
-        - name: cartservice
+        - group: ""
+          kind: Service
+          name: cartservice
           port: {{ $ports.cartservice }}
+          weight: 1
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -210,7 +263,9 @@ metadata:
     app: checkoutservice
 spec:
   parentRefs:
-    - name: {{ $gw.name }}
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: {{ $gw.name }}
   rules:
     - matches:
         - path:
@@ -223,8 +278,11 @@ spec:
               type: ReplaceFullPath
               replaceFullPath: /checkout
       backendRefs:
-        - name: checkoutservice
+        - group: ""
+          kind: Service
+          name: checkoutservice
           port: {{ $ports.checkoutservice }}
+          weight: 1
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -235,7 +293,9 @@ metadata:
     app: currencyservice
 spec:
   parentRefs:
-    - name: {{ $gw.name }}
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: {{ $gw.name }}
   rules:
     - matches:
         - path:
@@ -248,8 +308,11 @@ spec:
               type: ReplaceFullPath
               replaceFullPath: /currencies
       backendRefs:
-        - name: currencyservice
+        - group: ""
+          kind: Service
+          name: currencyservice
           port: {{ $ports.currencyservice }}
+          weight: 1
     - matches:
         - path:
             type: Exact
@@ -261,8 +324,11 @@ spec:
               type: ReplaceFullPath
               replaceFullPath: /convert
       backendRefs:
-        - name: currencyservice
+        - group: ""
+          kind: Service
+          name: currencyservice
           port: {{ $ports.currencyservice }}
+          weight: 1
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -273,7 +339,9 @@ metadata:
     app: emailservice
 spec:
   parentRefs:
-    - name: {{ $gw.name }}
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: {{ $gw.name }}
   rules:
     - matches:
         - path:
@@ -286,8 +354,11 @@ spec:
               type: ReplaceFullPath
               replaceFullPath: /send-confirmation
       backendRefs:
-        - name: emailservice
+        - group: ""
+          kind: Service
+          name: emailservice
           port: {{ $ports.emailservice }}
+          weight: 1
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -298,7 +369,9 @@ metadata:
     app: paymentservice
 spec:
   parentRefs:
-    - name: {{ $gw.name }}
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: {{ $gw.name }}
   rules:
     - matches:
         - path:
@@ -311,8 +384,11 @@ spec:
               type: ReplaceFullPath
               replaceFullPath: /charge
       backendRefs:
-        - name: paymentservice
+        - group: ""
+          kind: Service
+          name: paymentservice
           port: {{ $ports.paymentservice }}
+          weight: 1
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -323,7 +399,9 @@ metadata:
     app: productcatalogservice
 spec:
   parentRefs:
-    - name: {{ $gw.name }}
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: {{ $gw.name }}
   rules:
     - matches:
         - path:
@@ -336,8 +414,11 @@ spec:
               type: ReplacePrefixMatch
               replacePrefixMatch: /products/
       backendRefs:
-        - name: productcatalogservice
+        - group: ""
+          kind: Service
+          name: productcatalogservice
           port: {{ $ports.productcatalogservice }}
+          weight: 1
     - matches:
         - path:
             type: Exact
@@ -349,8 +430,11 @@ spec:
               type: ReplaceFullPath
               replaceFullPath: /products
       backendRefs:
-        - name: productcatalogservice
+        - group: ""
+          kind: Service
+          name: productcatalogservice
           port: {{ $ports.productcatalogservice }}
+          weight: 1
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -361,7 +445,9 @@ metadata:
     app: recommendationservice
 spec:
   parentRefs:
-    - name: {{ $gw.name }}
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: {{ $gw.name }}
   rules:
     - matches:
         - path:
@@ -374,8 +460,11 @@ spec:
               type: ReplaceFullPath
               replaceFullPath: /recommendations
       backendRefs:
-        - name: recommendationservice
+        - group: ""
+          kind: Service
+          name: recommendationservice
           port: {{ $ports.recommendationservice }}
+          weight: 1
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -386,7 +475,9 @@ metadata:
     app: shippingservice
 spec:
   parentRefs:
-    - name: {{ $gw.name }}
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: {{ $gw.name }}
   rules:
     - matches:
         - path:
@@ -399,8 +490,11 @@ spec:
               type: ReplacePrefixMatch
               replacePrefixMatch: /
       backendRefs:
-        - name: shippingservice
+        - group: ""
+          kind: Service
+          name: shippingservice
           port: {{ $ports.shippingservice }}
+          weight: 1
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -411,12 +505,17 @@ metadata:
     app: assistantservice
 spec:
   parentRefs:
-    - name: {{ $gw.name }}
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: {{ $gw.name }}
   rules:
     - matches:
         - path:
             type: Exact
             value: /api/assistant/chat
       backendRefs:
-        - name: assistantservice
+        - group: ""
+          kind: Service
+          name: assistantservice
           port: {{ $ports.assistantservice }}
+          weight: 1

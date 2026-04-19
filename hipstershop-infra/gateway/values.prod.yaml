@@ -1,0 +1,10 @@
+# ─────────────────────────────────────────────────────────────
+#  gateway — PROD overrides
+#  Applied ONLY to the prod cluster gateway ArgoCD Application.
+#  Overrides the frontend service name to use the Argo Rollouts
+#  Blue-Green active service instead of the standard service.
+# ─────────────────────────────────────────────────────────────
+global:
+  # Route prod traffic to the Blue-Green active service managed by Argo Rollouts.
+  # Argo Rollouts switches this service's pod selector on promotion.
+  frontendServiceName: "frontend-active"

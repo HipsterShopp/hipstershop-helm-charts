@@ -1,5 +1,5 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
 metadata:
   namespace: {{ .Values.global.namespaces.frontend }}
   name: frontend
@@ -7,11 +7,6 @@ metadata:
     app: frontend
 spec:
   replicas: {{ .Values.global.replicas.frontend }}
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: {{ .Values.global.rollingUpdate.maxUnavailable }}
-      maxSurge: {{ .Values.global.rollingUpdate.maxSurge }}
   selector:
     matchLabels:
       app: frontend
@@ -67,3 +62,14 @@ spec:
             limits:
               cpu: {{ .Values.global.resources.standard.limits.cpu }}
               memory: {{ .Values.global.resources.standard.limits.memory }}
+
+  strategy:
+    blueGreen:
+      # activeService receives 100% of live user traffic
+      activeService: frontend-active
+      # previewService receives 0% traffic — use for internal testing
+      previewService: frontend-preview
+      # autoPromotionEnabled: false means you must manually promote after reviewing the green pod
+      autoPromotionEnabled: {{ .Values.global.blueGreen.autoPromotionEnabled }}
+      # Keep old blue ReplicaSet for this many seconds after promotion (useful for quick rollback)
+      scaleDownDelaySeconds: {{ .Values.global.blueGreen.scaleDownDelaySeconds }}

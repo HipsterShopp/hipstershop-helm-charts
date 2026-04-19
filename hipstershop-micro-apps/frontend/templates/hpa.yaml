@@ -5,8 +5,8 @@ metadata:
   name: frontend-hpa
 spec:
   scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
+    apiVersion: argoproj.io/v1alpha1
+    kind: Rollout
     name: frontend
   minReplicas: {{ .Values.global.hpa.frontend.minReplicas }}
   maxReplicas: {{ .Values.global.hpa.frontend.maxReplicas }}

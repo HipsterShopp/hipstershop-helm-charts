@@ -1,8 +1,32 @@
+# ── Active Service — receives 100% of live user traffic ──────────────────────
+# KGateway and all external routes point ONLY to this service.
+# Argo Rollouts automatically switches this service's pod selector
+# to point to the new (Green) ReplicaSet when you promote the rollout.
 apiVersion: v1
 kind: Service
 metadata:
   namespace: {{ .Values.global.namespaces.frontend }}
-  name: frontend
+  name: frontend-active
+  labels:
+    app: frontend
+spec:
+  type: ClusterIP
+  selector:
+    app: frontend
+  ports:
+  - name: http
+    port: {{ .Values.global.ports.frontendSvc }}
+    targetPort: {{ .Values.global.ports.frontend }}
+---
+# ── Preview Service — receives 0% of live traffic during rollout ──────────────
+# Used to internally test the new Green pod before promotion.
+# To test: kubectl port-forward svc/frontend-preview 8888:80 -n hipster-frontend
+# Then open http://localhost:8888 to see the new version before it goes live.
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: {{ .Values.global.namespaces.frontend }}
+  name: frontend-preview
   labels:
     app: frontend
 spec:

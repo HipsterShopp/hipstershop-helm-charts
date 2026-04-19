@@ -14,6 +14,11 @@ global:
     gatewayClassName: kgateway
     port:             80
 
+  # frontendServiceName controls which Service the gateway routes to.
+  # Dev cluster: "frontend"  (normal Deployment with a single service)
+  # Prod cluster: "frontend-active"  (Argo Rollouts Blue-Green active service)
+  frontendServiceName: "frontend"
+
   ports:
     adservice:             9555
     authservice:           8081

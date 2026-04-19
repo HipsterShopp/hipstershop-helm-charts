@@ -1,0 +1,50 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gateway
+  namespace: argocd
+  annotations:
+    # Wave 2 — runs after hipster-backend namespace exists (backend-common wave 0)
+    argocd.argoproj.io/sync-wave: "2"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: hipstershop
+
+  source:
+    repoURL: https://github.com/HipsterShopp/hipstershop-helm-charts
+    targetRevision: main
+    path: hipstershop-infra/gateway
+    helm:
+      valueFiles:
+        - values.yaml
+        - values.prod.yaml   # ← overrides frontendServiceName to frontend-active
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: hipster-backend
+
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+    syncOptions:
+      - CreateNamespace=false
+      - ServerSideApply=true
+      - RespectIgnoreDifferences=true
+
+  ignoreDifferences:
+    - group: gateway.networking.k8s.io
+      kind: GatewayClass
+      jsonPointers:
+        - /metadata/annotations
+        - /metadata/labels
+        - /spec/parametersRef
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      jqPathExpressions:
+        - '.spec.rules[].backendRefs[].group'
+        - '.spec.rules[].backendRefs[].kind'
+        - '.spec.rules[].backendRefs[].weight'
+        - '.spec.parentRefs[].group'
+        - '.spec.parentRefs[].kind'

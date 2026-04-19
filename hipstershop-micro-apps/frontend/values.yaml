@@ -21,9 +21,14 @@ global:
   replicas:
     frontend: 1
 
-  rollingUpdate:
-    maxUnavailable: 1
-    maxSurge: 1
+  # ── Blue-Green Rollout config (Argo Rollouts) ───────────────────
+  blueGreen:
+    # false = manual promotion required (recommended for prod)
+    # true  = auto-promote as soon as the green pod is healthy
+    autoPromotionEnabled: false
+    # Seconds to keep the old Blue ReplicaSet alive after promotion
+    # (gives you time to rollback if needed)
+    scaleDownDelaySeconds: 60
 
   ports:
     frontend:    8080

@@ -28,15 +28,27 @@ spec:
         ports:
         - containerPort: {{ .Values.global.ports.recommendationservice }}
         readinessProbe:
-          periodSeconds: 5
           httpGet:
             path: "/_healthz"
             port: {{ .Values.global.ports.recommendationservice }}
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 2
+          failureThreshold: 5
         livenessProbe:
-          periodSeconds: 5
           httpGet:
             path: "/_healthz"
             port: {{ .Values.global.ports.recommendationservice }}
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 2
+          failureThreshold: 5
+        startupProbe:
+          httpGet:
+            path: "/_healthz"
+            port: {{ .Values.global.ports.recommendationservice }}
+          failureThreshold: 30
+          periodSeconds: 5
         envFrom:
         - configMapRef:
             name: hipster-config

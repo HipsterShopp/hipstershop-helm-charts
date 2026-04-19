@@ -17,4 +17,4 @@ global:
 
   # Fallback tag — Image Updater overwrites via .argocd-source-adservice-prod.yaml
   images:
-    adservice: "yampss/hipstershop-adservice:adservice-v0.1.4"
+    adservice: "yampss/hipstershop-adservice:adservice-v0.1.5"

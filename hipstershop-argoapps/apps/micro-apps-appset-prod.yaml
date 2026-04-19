@@ -66,10 +66,16 @@ spec:
       # Without these rules, ArgoCD detects constant drift and enters a reconciliation loop.
       ignoreDifferences:
         # Ignore all of .status on Rollout (managed entirely by the Rollouts controller)
+        # Also ignore:
+        #   - spec.replicas: transiently modified by Rollouts during blue-green scale up/down
+        #   - protocol: TCP: Kubernetes auto-injects this default on container ports not in Git
         - group: argoproj.io
           kind: Rollout
           jsonPointers:
             - /status
+          jqPathExpressions:
+            - '.spec.replicas'
+            - '.spec.template.spec.containers[].ports[].protocol'
         # Ignore the dynamic selector label Rollouts injects into the active/preview Services
         - group: ""
           kind: Service

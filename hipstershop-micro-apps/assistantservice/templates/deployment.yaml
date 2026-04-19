@@ -52,9 +52,23 @@ spec:
             memory: {{ .Values.global.resources.standard.limits.memory }}
         readinessProbe:
           httpGet:
-            path: /_healthz
+            path: "/_healthz"
             port: {{ .Values.global.ports.assistantservice }}
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 2
+          failureThreshold: 5
         livenessProbe:
           httpGet:
-            path: /_healthz
+            path: "/_healthz"
             port: {{ .Values.global.ports.assistantservice }}
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 2
+          failureThreshold: 5
+        startupProbe:
+          httpGet:
+            path: "/_healthz"
+            port: {{ .Values.global.ports.assistantservice }}
+          failureThreshold: 30
+          periodSeconds: 5

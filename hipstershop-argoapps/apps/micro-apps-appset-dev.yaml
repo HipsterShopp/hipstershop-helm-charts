@@ -30,16 +30,8 @@ spec:
     metadata:
       name: '{{name}}-dev'
       namespace: argocd
-      annotations:
-        # ── ArgoCD Image Updater ──────────────────────────────────────
-        # Watches for new develop-* tagged images on DockerHub
-        # Writes the tag back to develop branch via .argocd-source-<name>-dev.yaml
-        argocd-image-updater.argoproj.io/image-list: "img=yampss/hipstershop-{{name}}"
-        argocd-image-updater.argoproj.io/img.update-strategy: name
-        argocd-image-updater.argoproj.io/img.allow-tags: "regexp:^develop-"
-        argocd-image-updater.argoproj.io/img.helm.image-spec: "global.images.{{name}}"
-        argocd-image-updater.argoproj.io/write-back-method: git
-        argocd-image-updater.argoproj.io/git-branch: develop
+      # Image tags are updated by CI (GitHub Actions) upon push to develop.
+      # ArgoCD Image Updater is NOT used for dev — CI owns all tag updates via values.dev.yaml.
 
     spec:
       project: hipstershop

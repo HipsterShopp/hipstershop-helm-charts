@@ -30,15 +30,8 @@ spec:
     metadata:
       name: '{{name}}-prod'
       namespace: argocd
-      annotations:
-        # ── ArgoCD Image Updater ──────────────────────────────────────
-        # Watches for new semver-tagged images on DockerHub
-        # Writes the tag back to main branch via .argocd-source-<name>-prod.yaml
-        argocd-image-updater.argoproj.io/image-list: "img=yampss/hipstershop-{{name}}"
-        argocd-image-updater.argoproj.io/img.update-strategy: semver
-        argocd-image-updater.argoproj.io/img.helm.image-spec: "global.images.{{name}}"
-        argocd-image-updater.argoproj.io/write-back-method: git
-        argocd-image-updater.argoproj.io/git-branch: main
+      # Image tags are updated by CI (GitHub Actions) upon push to main.
+      # ArgoCD Image Updater is NOT used for prod — CI owns all tag updates via values.prod.yaml.
 
     spec:
       project: hipstershop

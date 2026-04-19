@@ -55,8 +55,9 @@ spec:
           prune: false         # prod cluster — never auto-prune
         syncOptions:
           - CreateNamespace=true
-          - ServerSideApply=true
           - RespectIgnoreDifferences=true  # required for ignoreDifferences to apply during auto-sync
+          # Note: ServerSideApply intentionally REMOVED — it caused a silent field manager conflict
+          # between ArgoCD and the Argo Rollouts controller, preventing image tag updates from applying.
 
       # ── Argo Rollouts drift suppression ──────────────────────────────────────
       # The Rollouts controller mutates live resources after sync:

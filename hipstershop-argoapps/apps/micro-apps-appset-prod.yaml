@@ -56,4 +56,30 @@ spec:
         syncOptions:
           - CreateNamespace=true
           - ServerSideApply=true
-          - RespectIgnoreDifferences=true
+          - RespectIgnoreDifferences=true  # required for ignoreDifferences to apply during auto-sync
+
+      # ── Argo Rollouts drift suppression ──────────────────────────────────────
+      # The Rollouts controller mutates live resources after sync:
+      #   1. Rollout.status — continuously updated (revision, phase, activeSelector, etc.)
+      #   2. Service selectors — Rollouts adds/changes rollouts-pod-template-hash
+      #      on frontend-active and frontend-preview to shift traffic between ReplicaSets.
+      # Without these rules, ArgoCD detects constant drift and enters a reconciliation loop.
+      ignoreDifferences:
+        # Ignore all of .status on Rollout (managed entirely by the Rollouts controller)
+        - group: argoproj.io
+          kind: Rollout
+          jsonPointers:
+            - /status
+        # Ignore the dynamic selector label Rollouts injects into the active/preview Services
+        - group: ""
+          kind: Service
+          name: frontend-active
+          namespace: hipster-frontend
+          jsonPointers:
+            - /spec/selector
+        - group: ""
+          kind: Service
+          name: frontend-preview
+          namespace: hipster-frontend
+          jsonPointers:
+            - /spec/selector

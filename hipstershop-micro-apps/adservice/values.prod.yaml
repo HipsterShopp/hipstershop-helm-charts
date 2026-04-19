@@ -15,6 +15,7 @@ global:
         cpu: 300m
         memory: 512Mi
 
-  # Fallback tag — Image Updater overwrites via .argocd-source-adservice-prod.yaml
+  # Prod image — GHCR (public package). CI updates this tag on every approved main push.
+  # Dev image (DockerHub) is in values.dev.yaml and is unchanged.
   images:
-    adservice: "yampss/hipstershop-adservice:adservice-v0.1.5"
+    adservice: "ghcr.io/hipstershopoo/hipstershop-adservice:adservice-v0.1.5"

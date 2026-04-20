@@ -20,6 +20,7 @@ spec:
           image: {{ .Values.global.images.frontend }}
           ports:
           - containerPort: {{ .Values.global.ports.frontend }}
+            protocol: TCP   # explicit — prevents Kubernetes auto-inject causing ArgoCD drift
           readinessProbe:
             initialDelaySeconds: 10
             httpGet:

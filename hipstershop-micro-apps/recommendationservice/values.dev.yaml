@@ -9,4 +9,4 @@ global:
       requests: { cpu: 50m,  memory: 110Mi }
       limits:   { cpu: 100m, memory: 225Mi }
   images:
-    recommendationservice: "854929211842.dkr.ecr.us-east-1.amazonaws.com/hipstershop-recommendationservice:develop-d202050b"
+    recommendationservice: "yampss/hipstershop-recommendationservice:develop-8e896022"

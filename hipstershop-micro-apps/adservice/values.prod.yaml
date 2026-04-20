@@ -18,4 +18,4 @@ global:
   # Prod image — GHCR (public package). CI updates this tag on every approved main push.
   # Dev image (DockerHub) is in values.dev.yaml and is unchanged.
   images:
-    adservice: "ghcr.io/hipstershopp/hipstershop-adservice:adservice-v0.2.1"
+    adservice: "ghcr.io/hipstershopp/hipstershop-adservice:adservice-v0.2.2"

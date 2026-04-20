@@ -23,7 +23,8 @@ spec:
           - { name: paymentservice,        namespace: hipster-backend }
           - { name: productcatalogservice, namespace: hipster-backend }
           - { name: recommendationservice, namespace: hipster-backend }
-          - { name: shippingservice,       namespace: hipster-backend }
+          # shippingservice intentionally removed — deployed via GitHub Actions native CD (OIDC).
+          # ArgoCD no longer manages shippingservice prod to avoid conflict with kubectl set image.
           - { name: assistantservice,      namespace: hipster-backend }
 
   template:

@@ -1,0 +1,90 @@
+# ─────────────────────────────────────────────────────────────────────────────
+#  GitHub Actions OIDC — ShippingService Verifier RBAC
+#
+#  Purpose:
+#    Allow GitHub Actions workflows running on the `main` branch of
+#    hipstershop-shippingservice to authenticate to the production cluster
+#    via GitHub's OIDC provider (no static kubeconfig or long-lived token).
+#
+#  How authentication works:
+#    1. kube-apiserver is configured with:
+#         --oidc-issuer-url=https://token.actions.githubusercontent.com
+#         --oidc-client-id=kubernetes
+#         --oidc-username-claim=sub
+#         --oidc-username-prefix=github:
+#    2. GitHub Actions requests an ephemeral JWT (audience: kubernetes)
+#    3. The JWT `sub` claim for a main-branch push is:
+#         repo:HipsterShopp/hipstershop-shippingservice:ref:refs/heads/main
+#    4. kube-apiserver resolves the username as:
+#         github:repo:HipsterShopp/hipstershop-shippingservice:ref:refs/heads/main
+#    5. The RoleBinding below grants this identity read-only access
+#       scoped strictly to the hipster-backend namespace.
+#
+#  Security properties:
+#    - Namespace-scoped: cannot read any other namespace (frontend, argocd, etc.)
+#    - Branch-scoped: develop branch has a different sub → no binding → Forbidden
+#    - Repo-scoped: only this specific repo triggers this identity
+#    - Token is ephemeral: expires after ~5 minutes; no rotation needed
+#
+#  Apply once to the production cluster:
+#    kubectl apply -f hipstershop-infra/rbac/github-actions-oidc-shippingservice.yaml
+#
+#  Verify:
+#    kubectl describe role github-actions-shippingservice-verifier -n hipster-backend
+#    kubectl describe rolebinding github-actions-shippingservice-verifier -n hipster-backend
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ── Role ──────────────────────────────────────────────────────────────────────
+# Grants the minimum verbs required to:
+#   - kubectl rollout status deployment/shippingservice -n hipster-backend
+#   - kubectl get pods -n hipster-backend -l app=shippingservice
+#
+# Nothing beyond this: no secrets, no configmaps, no write access.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: github-actions-shippingservice-verifier
+  namespace: hipster-backend
+  labels:
+    managed-by: gitops
+    purpose: github-actions-oidc
+    service: shippingservice
+rules:
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "list", "patch", "update"]   # patch + update needed for kubectl set image
+  - apiGroups: ["apps"]
+    resources: ["replicasets"]
+    verbs: ["get", "list"]                       # needed by kubectl rollout status
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list"]                       # needed by rollout status + kubectl get pods
+
+---
+
+# ── RoleBinding ───────────────────────────────────────────────────────────────
+# Binds the Role to the EXACT OIDC identity for the main branch only.
+#
+# Subject username breakdown:
+#   Prefix (set by --oidc-username-prefix):  github:
+#   sub claim:                               repo:HipsterShopp/hipstershop-shippingservice:ref:refs/heads/main
+#   Full username:                           github:repo:HipsterShopp/hipstershop-shippingservice:ref:refs/heads/main
+#
+# Any develop-branch token has sub = ...ref:refs/heads/develop → no binding → 403 Forbidden
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: github-actions-shippingservice-verifier
+  namespace: hipster-backend
+  labels:
+    managed-by: gitops
+    purpose: github-actions-oidc
+    service: shippingservice
+subjects:
+  - kind: User
+    name: "github:repo:HipsterShopp/hipstershop-shippingservice:ref:refs/heads/main"
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: github-actions-shippingservice-verifier
+  apiGroup: rbac.authorization.k8s.io

@@ -1,9 +1,4 @@
-# ─────────────────────────────────────────────────────────────
-#  micro-apps-appset-prod.yaml
-#  Deploy to: PROD cluster (your cluster)
-#  Tracks:    main branch of hipstershop-helm-charts
-#  Apply to prod cluster: kubectl apply -f this file -n argocd
-# ─────────────────────────────────────────────────────────────
+
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
@@ -23,17 +18,12 @@ spec:
           - { name: paymentservice,        namespace: hipster-backend }
           - { name: productcatalogservice, namespace: hipster-backend }
           - { name: recommendationservice, namespace: hipster-backend }
-          # shippingservice intentionally removed — deployed via GitHub Actions native CD (OIDC).
-          # ArgoCD no longer manages shippingservice prod to avoid conflict with kubectl set image.
           - { name: assistantservice,      namespace: hipster-backend }
 
   template:
     metadata:
       name: '{{name}}-prod'
       namespace: argocd
-      # Image tags are updated by CI (GitHub Actions) upon push to main.
-      # ArgoCD Image Updater is NOT used for prod — CI owns all tag updates via values.prod.yaml.
-
     spec:
       project: hipstershop
 
@@ -56,28 +46,15 @@ spec:
           prune: false         # prod cluster — never auto-prune
         syncOptions:
           - CreateNamespace=true
-          - RespectIgnoreDifferences=true  # required for ignoreDifferences to apply during auto-sync
-          # Note: ServerSideApply intentionally REMOVED — it caused a silent field manager conflict
-          # between ArgoCD and the Argo Rollouts controller, preventing image tag updates from applying.
-
-      # ── Argo Rollouts drift suppression ──────────────────────────────────────
-      # The Rollouts controller mutates live resources after sync:
-      #   1. Rollout.status — continuously updated (revision, phase, activeSelector, etc.)
-      #   2. Service selectors — Rollouts adds/changes rollouts-pod-template-hash
-      #      on frontend-active and frontend-preview to shift traffic between ReplicaSets.
-      # Without these rules, ArgoCD detects constant drift and enters a reconciliation loop.
+          - RespectIgnoreDifferences=true  
       ignoreDifferences:
-        # Ignore all of .status on Rollout (managed entirely by the Rollouts controller)
-        # Also ignore:
-        #   - spec.replicas: transiently modified by Rollouts during blue-green scale up/down
-        #   - protocol: TCP: Kubernetes auto-injects this default on container ports not in Git
+
         - group: argoproj.io
           kind: Rollout
           jsonPointers:
             - /status
           jqPathExpressions:
             - '.spec.replicas'
-            - '.spec.template.spec.containers[].ports[].protocol'
         # Ignore the dynamic selector label Rollouts injects into the active/preview Services
         - group: ""
           kind: Service

@@ -1,7 +1,7 @@
 {{- $ns := .Values.global.namespaces -}}
 {{- $ports := .Values.global.ports -}}
 {{- $gw := .Values.global.gateway -}}
-# ── Frontend Route (cross-namespace) ─────────────────────────────
+
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -115,7 +115,7 @@ spec:
           port: {{ $ports.frontendSvc }}
           weight: 1
 ---
-# ── Backend Service Routes ───────────────────────────────────────
+
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:

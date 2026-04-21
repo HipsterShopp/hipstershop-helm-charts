@@ -1,7 +1,4 @@
-# ─────────────────────────────────────────────────────────────
-#  checkoutservice — self-contained values
-#  Has MongoDB order DB dependency via init-container connection string
-# ─────────────────────────────────────────────────────────────
+
 
 global:
   namespaces:
@@ -9,7 +6,7 @@ global:
     database: hipster-database
 
   images:
-    checkoutservice: "yampss/hipstershop-checkoutservice:latest"   # CI overwrites the tag
+    checkoutservice: "yampss/hipstershop-checkoutservice:latest"   
 
   replicas:
     checkoutservice: 1

@@ -3,7 +3,7 @@ global:
     backend: hipster-backend
 
   images:
-    adservice: "yampss/hipstershop-adservice:adservice-v0.1.2"  # Image Updater manages this
+    adservice: "yampss/hipstershop-adservice:adservice-v0.1.2"  
 
   replicas:
     adservice: 1

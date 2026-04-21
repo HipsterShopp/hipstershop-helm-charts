@@ -1,13 +1,9 @@
-# ─────────────────────────────────────────────────────────────
-#  currencyservice — self-contained values
-# ─────────────────────────────────────────────────────────────
-
 global:
   namespaces:
     backend: hipster-backend
 
   images:
-    currencyservice: "yampss/hipstershop-currencyservice:latest"   # CI overwrites the tag
+    currencyservice: "yampss/hipstershop-currencyservice:latest"   
 
   replicas:
     currencyservice: 1

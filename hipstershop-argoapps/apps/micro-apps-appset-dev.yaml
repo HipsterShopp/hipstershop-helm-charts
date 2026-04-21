@@ -1,9 +1,4 @@
-# ─────────────────────────────────────────────────────────────
-#  micro-apps-appset-dev.yaml
-#  Deploy to: DEV cluster (friend's cluster)
-#  Tracks:    develop branch of hipstershop-helm-charts
-#  Apply to dev cluster: kubectl apply -f this file -n argocd
-# ─────────────────────────────────────────────────────────────
+
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
@@ -30,8 +25,7 @@ spec:
     metadata:
       name: '{{name}}-dev'
       namespace: argocd
-      # Image tags are updated by CI (GitHub Actions) upon push to develop.
-      # ArgoCD Image Updater is NOT used for dev — CI owns all tag updates via values.dev.yaml.
+
 
     spec:
       project: hipstershop
@@ -46,13 +40,13 @@ spec:
             - values.dev.yaml
 
       destination:
-        server: https://kubernetes.default.svc   # dev cluster's local API
+        server: https://kubernetes.default.svc   
         namespace: '{{namespace}}'
 
       syncPolicy:
         automated:
           selfHeal: true
-          prune: true          # dev cluster — prune stale resources
+          prune: true         
         syncOptions:
           - CreateNamespace=true
           - ServerSideApply=true

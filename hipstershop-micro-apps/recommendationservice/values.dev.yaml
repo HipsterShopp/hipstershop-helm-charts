@@ -1,6 +1,4 @@
-# ─────────────────────────────────────────────────────────────
-#  recommendationservice — dev overrides
-# ─────────────────────────────────────────────────────────────
+
 global:
   replicas:
     recommendationservice: 1

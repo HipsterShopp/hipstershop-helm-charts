@@ -1,8 +1,4 @@
-# ─────────────────────────────────────────────────────────────
-#  gateway — self-contained values
-#  Creates: GatewayClass (if not exists), Gateway, all HTTPRoutes
-#  Stays in the HipsterShop monorepo — cross-cutting infra.
-# ─────────────────────────────────────────────────────────────
+
 
 global:
   namespaces:
@@ -14,9 +10,7 @@ global:
     gatewayClassName: kgateway
     port:             80
 
-  # frontendServiceName controls which Service the gateway routes to.
-  # Dev cluster: "frontend"  (normal Deployment with a single service)
-  # Prod cluster: "frontend-active"  (Argo Rollouts Blue-Green active service)
+
   frontendServiceName: "frontend"
 
   ports:
@@ -26,8 +20,8 @@ global:
     checkoutservice:       5050
     currencyservice:       7000
     emailservice:          8080
-    frontend:              8080    # container port
-    frontendSvc:           80      # Service port used by HTTPRoute backendRefs
+    frontend:              8080   
+    frontendSvc:           80      
     paymentservice:        50051
     productcatalogservice: 3550
     recommendationservice: 8080

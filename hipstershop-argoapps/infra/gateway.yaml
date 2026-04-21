@@ -4,7 +4,7 @@ metadata:
   name: gateway
   namespace: argocd
   annotations:
-    # Wave 2 — runs after hipster-backend namespace exists (backend-common wave 0)
+    # Wave 2 
     argocd.argoproj.io/sync-wave: "2"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -21,7 +21,7 @@ spec:
 
   destination:
     server: https://kubernetes.default.svc
-    namespace: hipster-backend   # Gateway resource lives here; GatewayClass is cluster-scoped
+    namespace: hipster-backend   
 
   syncPolicy:
     automated:
@@ -29,10 +29,10 @@ spec:
       prune: true
     syncOptions:
       - CreateNamespace=false
-      - ServerSideApply=true           # required for Gateway API CRDs
-      - RespectIgnoreDifferences=true  # stop re-applying normalized fields
+      - ServerSideApply=true          
+      - RespectIgnoreDifferences=true 
 
-  # GatewayClass is cluster-scoped — suppress kgateway-owned field drift
+
   ignoreDifferences:
     - group: gateway.networking.k8s.io
       kind: GatewayClass
@@ -40,11 +40,7 @@ spec:
         - /metadata/annotations
         - /metadata/labels
         - /spec/parametersRef
-    # Kubernetes normalizes HTTPRoute backendRefs and parentRefs:
-    #   - drops group: "" and kind: Service  (they are the defaults)
-    #   - drops weight: 1                    (default weight)
-    #   - drops group: gateway.networking.k8s.io and kind: Gateway from parentRefs
-    # ArgoCD still sends them → perpetual OutOfSync without this block.
+
     - group: gateway.networking.k8s.io
       kind: HTTPRoute
       jqPathExpressions:

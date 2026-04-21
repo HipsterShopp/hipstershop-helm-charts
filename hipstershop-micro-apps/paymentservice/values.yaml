@@ -1,6 +1,4 @@
-# ─────────────────────────────────────────────────────────────
-#  paymentservice — self-contained values
-# ─────────────────────────────────────────────────────────────
+
 
 global:
   namespaces:
@@ -8,7 +6,7 @@ global:
     database: hipster-database
 
   images:
-    paymentservice: "yampss/hipstershop-paymentservice:latest"   # CI overwrites the tag
+    paymentservice: "yampss/hipstershop-paymentservice:latest" 
 
   replicas:
     paymentservice: 1

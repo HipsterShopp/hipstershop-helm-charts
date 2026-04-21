@@ -1,7 +1,3 @@
-# ─────────────────────────────────────────────────────────────
-#  cartservice — self-contained values
-#  Has MongoDB init-container → needs database namespace + cart user DB
-# ─────────────────────────────────────────────────────────────
 
 global:
   namespaces:
@@ -9,8 +5,8 @@ global:
     database: hipster-database
 
   images:
-    cartservice: "yampss/hipstershop-cartservice:latest"   # CI overwrites the tag
-    mongodb:     mongo:7.0                                  # used by init-container
+    cartservice: "yampss/hipstershop-cartservice:latest"   
+    mongodb:     mongo:7.0              
 
   replicas:
     cartservice: 1

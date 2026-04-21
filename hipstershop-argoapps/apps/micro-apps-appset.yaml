@@ -4,9 +4,7 @@ metadata:
   name: micro-apps
   namespace: argocd
 spec:
-  # ── Generator: defines the matrix of services to create Applications for ────
-  # Each element becomes one ArgoCD Application.
-  # adservice is excluded — it has its own Application (CI-driven tag update).
+
   generators:
     - list:
         elements:
@@ -23,7 +21,7 @@ spec:
           - name: emailservice
             namespace: hipster-backend
           - name: frontend
-            namespace: hipster-frontend   # frontend lives in its own namespace
+            namespace: hipster-frontend  
           - name: paymentservice
             namespace: hipster-backend
           - name: productcatalogservice
@@ -33,24 +31,14 @@ spec:
           - name: shippingservice
             namespace: hipster-backend
 
-  # ── Template: stamped once per element above ─────────────────────────────
+
   template:
     metadata:
       name: "{{name}}"
       namespace: argocd
       annotations:
-        # Wave 3 — all micro-apps deploy after infra (waves 0–2)
+        # Wave 3 
         argocd.argoproj.io/sync-wave: "3"
-
-        # ── ArgoCD Image Updater ─────────────────────────────────────────────
-        # Polls Docker Hub for a new semver tag and writes it back to git.
-        # Alias "app" is used so annotation KEYS stay static (only values use {{name}}).
-        #
-        # REQUIREMENT: Each service's values.yaml must have:
-        #   global.images.<service>.repository: yampss/hipstershop-<service>
-        #   global.images.<service>.tag: <current-tag>
-        # And the deployment template must use:
-        #   image: {{ .Values.global.images.<service>.repository }}:{{ .Values.global.images.<service>.tag }}
         argocd-image-updater.argoproj.io/image-list: "app=yampss/hipstershop-{{name}}"
         argocd-image-updater.argoproj.io/app.update-strategy: semver
         argocd-image-updater.argoproj.io/write-back-method: git

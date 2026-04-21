@@ -20,7 +20,7 @@ spec:
           image: {{ .Values.global.images.frontend }}
           ports:
           - containerPort: {{ .Values.global.ports.frontend }}
-            protocol: TCP   # explicit — prevents Kubernetes auto-inject causing ArgoCD drift
+            protocol: TCP   
           readinessProbe:
             initialDelaySeconds: 10
             httpGet:
@@ -66,11 +66,7 @@ spec:
 
   strategy:
     blueGreen:
-      # activeService receives 100% of live user traffic
       activeService: frontend-active
-      # previewService receives 0% traffic — use for internal testing
       previewService: frontend-preview
-      # autoPromotionEnabled: false means you must manually promote after reviewing the green pod
       autoPromotionEnabled: {{ .Values.global.blueGreen.autoPromotionEnabled }}
-      # Keep old blue ReplicaSet for this many seconds after promotion (useful for quick rollback)
       scaleDownDelaySeconds: {{ .Values.global.blueGreen.scaleDownDelaySeconds }}

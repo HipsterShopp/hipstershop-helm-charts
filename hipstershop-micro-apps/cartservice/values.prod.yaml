@@ -9,4 +9,4 @@ global:
       requests: { cpu: 100m, memory: 128Mi }
       limits:   { cpu: 200m, memory: 256Mi }
   images:
-    cartservice: "yampss/hipstershop-cartservice:cartservice-v0.1.3"
+    cartservice: "yampss/hipstershop-cartservice:cartservice-v0.1.4"

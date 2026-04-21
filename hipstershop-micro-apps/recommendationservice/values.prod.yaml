@@ -9,4 +9,4 @@ global:
       requests: { cpu: 100m, memory: 220Mi }
       limits:   { cpu: 200m, memory: 450Mi }
   images:
-    recommendationservice: "yampss/hipstershop-recommendationservice:recommendationservice-v1.0.1"
+    recommendationservice: "yampss/hipstershop-recommendationservice:recommendationservice-v1.0.2"

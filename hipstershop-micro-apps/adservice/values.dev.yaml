@@ -1,7 +1,3 @@
-# ─────────────────────────────────────────────────────────────
-#  adservice — dev overrides
-#  Replicas: 1  |  Image: managed by ArgoCD Image Updater (develop-* tags)
-# ─────────────────────────────────────────────────────────────
 global:
   replicas:
     adservice: 1
@@ -15,6 +11,5 @@ global:
         cpu: 200m
         memory: 256Mi
 
-  # Fallback tag — Image Updater overwrites via .argocd-source-adservice-dev.yaml
   images:
     adservice: "yampss/hipstershop-adservice:develop-latest"

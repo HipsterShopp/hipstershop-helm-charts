@@ -37,13 +37,13 @@ spec:
             - values.prod.yaml
 
       destination:
-        server: https://kubernetes.default.svc   # prod cluster's local API
+        server: https://kubernetes.default.svc  
         namespace: '{{namespace}}'
 
       syncPolicy:
         automated:
           selfHeal: true
-          prune: false         # prod cluster — never auto-prune
+          prune: false         
         syncOptions:
           - CreateNamespace=true
           - RespectIgnoreDifferences=true  
@@ -55,7 +55,7 @@ spec:
             - /status
           jqPathExpressions:
             - '.spec.replicas'
-        # Ignore the dynamic selector label Rollouts injects into the active/preview Services
+ 
         - group: ""
           kind: Service
           name: frontend-active

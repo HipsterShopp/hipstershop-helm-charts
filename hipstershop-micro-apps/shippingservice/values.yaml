@@ -1,13 +1,10 @@
-# ─────────────────────────────────────────────────────────────
-#  shippingservice — self-contained values
-# ─────────────────────────────────────────────────────────────
 
 global:
   namespaces:
     backend: hipster-backend
 
   images:
-    shippingservice: "yampss/hipstershop-shippingservice:latest"   # CI overwrites the tag
+    shippingservice: "yampss/hipstershop-shippingservice:latest"   
 
   replicas:
     shippingservice: 1

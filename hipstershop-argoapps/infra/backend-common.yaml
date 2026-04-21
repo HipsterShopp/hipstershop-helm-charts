@@ -4,7 +4,7 @@ metadata:
   name: backend-common
   namespace: argocd
   annotations:
-    # Wave 0 — runs alongside mongodb; creates hipster-backend namespace + ConfigMaps
+    # Wave 0 
     argocd.argoproj.io/sync-wave: "0"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -21,12 +21,12 @@ spec:
 
   destination:
     server: https://kubernetes.default.svc
-    namespace: hipster-backend   # default ns; chart's namespace.yaml creates it
+    namespace: hipster-backend  
 
   syncPolicy:
     automated:
       selfHeal: true
-      prune: false   # ConfigMaps and Secrets — safe to leave prune off
+      prune: false   
     syncOptions:
       - CreateNamespace=false
       - ServerSideApply=true

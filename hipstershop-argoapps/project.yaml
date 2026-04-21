@@ -3,17 +3,13 @@ kind: AppProject
 metadata:
   name: hipstershop
   namespace: argocd
-  # Prevents accidental deletion of this project while Applications exist
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   description: "HipsterShop microservices platform — all charts and infra"
 
-  # ── Allowed source repositories ────────────────────────────────────────────
   sourceRepos:
     - "https://github.com/HipsterShopp/hipstershop-helm-charts"
-
-  # ── Allowed deployment destinations ────────────────────────────────────────
   destinations:
     - server: https://kubernetes.default.svc
       namespace: hipster-backend
@@ -22,23 +18,19 @@ spec:
     - server: https://kubernetes.default.svc
       namespace: hipster-database
     - server: https://kubernetes.default.svc
-      namespace: kube-system          # sealed-secrets controller lives here
+      namespace: kube-system          
     - server: https://kubernetes.default.svc
-      namespace: ""                   # cluster-scoped resources (GatewayClass)
+      namespace: ""                   
 
-  # ── Cluster-scoped resource access ─────────────────────────────────────────
-  # TODO (production): restrict to specific groups/kinds once stable
+
   clusterResourceWhitelist:
     - group: "*"
       kind: "*"
 
-  # ── Namespace-scoped resource access ───────────────────────────────────────
-  # TODO (production): restrict to specific groups/kinds once stable
+
   namespaceResourceWhitelist:
     - group: "*"
       kind: "*"
 
-  # ── Orphaned resource monitoring ───────────────────────────────────────────
-  # Warns in ArgoCD UI if resources exist in the namespace that no Application owns
   orphanedResources:
     warn: true

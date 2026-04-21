@@ -30,7 +30,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# ── Validate required env vars ────────────────────────────────────────────────
+
 required_vars=(
   JWT_SECRET GEMINI_API_KEY MONGO_ROOT_PASSWORD
   AUTH_PASS CART_PASS CATALOG_PASS ORDER_PASS
@@ -55,7 +55,6 @@ seal() {
   echo "$raw_yaml" | kubeseal --cert "$SCRIPT_DIR/pub-cert.pem" --format yaml
 }
 
-# ── 1. backend-common secrets (hipster-backend) ───────────────────────────────
 echo ""
 echo "Generating backend-common-secrets.yaml..."
 
@@ -86,7 +85,7 @@ MONGO_USERS_BACKEND=$(kubectl create secret generic mongodb-users \
   > "$SCRIPT_DIR/backend-common-secrets.yaml"
 echo "  ✔ backend-common-secrets.yaml"
 
-# ── 2. mongodb secrets (hipster-database) ────────────────────────────────────
+
 echo ""
 echo "Generating mongodb-secrets.yaml..."
 

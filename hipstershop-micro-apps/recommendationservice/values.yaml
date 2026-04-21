@@ -1,7 +1,4 @@
-# ─────────────────────────────────────────────────────────────
-#  recommendationservice — self-contained values
-#  Note: uses higher memory limits (Python service)
-# ─────────────────────────────────────────────────────────────
+
 
 global:
   namespaces:
@@ -9,7 +6,7 @@ global:
     database: hipster-database
 
   images:
-    recommendationservice: "yampss/hipstershop-recommendationservice:latest"   # CI overwrites the tag
+    recommendationservice: "yampss/hipstershop-recommendationservice:latest"   
 
   replicas:
     recommendationservice: 1

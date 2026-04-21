@@ -1,4 +1,4 @@
-# ── Default deny all traffic in hipster-frontend ──────────────────
+
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -11,7 +11,7 @@ spec:
   - Egress
 
 ---
-# ── Allow required frontend traffic ──────────────────────────────
+
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -23,24 +23,24 @@ spec:
   - Ingress
   - Egress
   ingress:
-  # Allow from hipster-backend (gateway envoy proxy routes to frontend)
+
   - from:
     - namespaceSelector:
         matchLabels:
           name: {{ .Values.global.namespaces.backend }}
-  # Allow within hipster-frontend (loadgenerator -> frontend)
+
   - from:
     - podSelector: {}
   egress:
-  # Allow to hipster-backend (frontend -> gateway API)
+
   - to:
     - namespaceSelector:
         matchLabels:
           name: {{ .Values.global.namespaces.backend }}
-  # Allow within hipster-frontend
+
   - to:
     - podSelector: {}
-  # DNS resolution
+
   - to:
     - namespaceSelector: {}
     ports:

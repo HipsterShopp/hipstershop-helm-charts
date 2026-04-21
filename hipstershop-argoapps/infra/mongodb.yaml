@@ -4,7 +4,7 @@ metadata:
   name: mongodb
   namespace: argocd
   annotations:
-    # Wave 0 — first thing to deploy: creates hipster-database namespace + MongoDB
+    # Wave 0
     argocd.argoproj.io/sync-wave: "0"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -21,19 +21,18 @@ spec:
 
   destination:
     server: https://kubernetes.default.svc
-    namespace: hipster-database   # default ns; chart's namespace.yaml creates it
+    namespace: hipster-database  
 
   syncPolicy:
     automated:
       selfHeal: true
-      prune: false   # NEVER auto-prune a stateful database
+      prune: false   
     syncOptions:
-      - CreateNamespace=false   # chart manages its own namespace
+      - CreateNamespace=false   
       - ServerSideApply=true
-      - RespectIgnoreDifferences=true   # honour ignoreDifferences during sync too
+      - RespectIgnoreDifferences=true   
 
-  # Kubernetes auto-defaults these StatefulSet fields after apply.
-  # Without this block ArgoCD sees permanent drift and loops on self-heal.
+
   ignoreDifferences:
     - group: apps
       kind: StatefulSet

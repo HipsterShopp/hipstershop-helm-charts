@@ -1,6 +1,4 @@
-# ─────────────────────────────────────────────────────────────
-#  productcatalogservice — self-contained values
-# ─────────────────────────────────────────────────────────────
+
 
 global:
   namespaces:
@@ -8,7 +6,7 @@ global:
     database: hipster-database
 
   images:
-    productcatalogservice: "yampss/hipstershop-productcatalogservice:latest"   # CI overwrites the tag
+    productcatalogservice: "yampss/hipstershop-productcatalogservice:latest"  
 
   replicas:
     productcatalogservice: 1

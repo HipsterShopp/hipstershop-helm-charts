@@ -1,14 +1,10 @@
-# ─────────────────────────────────────────────────────────────
-#  emailservice — self-contained values
-# ─────────────────────────────────────────────────────────────
-
 global:
   namespaces:
     backend:  hipster-backend
     database: hipster-database
 
   images:
-    emailservice: "yampss/hipstershop-emailservice:latest"   # CI overwrites the tag
+    emailservice: "yampss/hipstershop-emailservice:latest"   
 
   replicas:
     emailservice: 1

@@ -1,13 +1,9 @@
-# ─────────────────────────────────────────────────────────────
-#  assistantservice — self-contained values
-# ─────────────────────────────────────────────────────────────
-
 global:
   namespaces:
     backend: hipster-backend
 
   images:
-    assistantservice: "yampss/hipstershop-assistantservice:latest"   # CI overwrites the tag
+    assistantservice: "yampss/hipstershop-assistantservice:latest"   
 
   replicas:
     assistantservice: 1

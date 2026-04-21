@@ -1,6 +1,4 @@
-# ─────────────────────────────────────────────────────────────
-#  productcatalogservice — prod overrides
-# ─────────────────────────────────────────────────────────────
+
 global:
   replicas:
     productcatalogservice: 1

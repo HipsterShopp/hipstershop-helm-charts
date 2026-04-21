@@ -1,8 +1,3 @@
-# ─────────────────────────────────────────────────────────────
-#  authservice — self-contained values
-#  Has MongoDB init-container for primary-readiness check
-#  Also uses JWT secret from existing cluster Secret (app-secrets)
-# ─────────────────────────────────────────────────────────────
 
 global:
   namespaces:
@@ -10,8 +5,8 @@ global:
     database: hipster-database
 
   images:
-    authservice: "yampss/hipstershop-authservice:latest"   # CI overwrites the tag
-    mongodb:     mongo:7.0                                  # used by init-container
+    authservice: "yampss/hipstershop-authservice:latest"   
+    mongodb:     mongo:7.0                                  
 
   replicas:
     authservice: 1

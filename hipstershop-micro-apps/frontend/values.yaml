@@ -1,33 +1,23 @@
-# ─────────────────────────────────────────────────────────────
-#  frontend — self-contained values
-#  Heavier chart: has Deployment, HPA, ConfigMaps, Secrets,
-#  NetworkPolicy, Namespace, and ReferenceGrant templates.
-#  Lives in hipster-frontend namespace.
-# ─────────────────────────────────────────────────────────────
+
 
 global:
   namespaces:
     frontend: hipster-frontend
     backend:  hipster-backend
 
-  # JWT secret for the frontend app-secrets Secret in hipster-frontend namespace.
-  # Must match the value in backend-common/values.yaml (or use Sealed Secrets).
+
   secrets:
     jwtSecret: "team4hipstershopsecret"
 
   images:
-    frontend: "yampss/hipstershop-frontend:latest"   # CI overwrites the tag
+    frontend: "yampss/hipstershop-frontend:latest"  
 
   replicas:
     frontend: 1
 
-  # ── Blue-Green Rollout config (Argo Rollouts) ───────────────────
   blueGreen:
-    # false = manual promotion required (recommended for prod)
-    # true  = auto-promote as soon as the green pod is healthy
+
     autoPromotionEnabled: false
-    # Seconds to keep the old Blue ReplicaSet alive after promotion
-    # (gives you time to rollback if needed)
     scaleDownDelaySeconds: 60
 
   ports:
@@ -43,7 +33,7 @@ global:
         cpu: 200m
         memory: 128Mi
 
-  # ── HPA ─────────────────────────────────────────────────────
+
   hpa:
     frontend:
       minReplicas: 1
@@ -60,7 +50,7 @@ global:
         podsValue: 2
         periodSeconds: 15
 
-  # ── ConfigMap values (frontend chart duplicates these in its own namespace) ──
+
   appConfig:
     enableTracing:        "1"
     collectorServiceAddr: "jaeger:4317"

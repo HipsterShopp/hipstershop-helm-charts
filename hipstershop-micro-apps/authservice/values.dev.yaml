@@ -9,4 +9,4 @@ global:
       requests: { cpu: 50m, memory: 64Mi }
       limits:   { cpu: 100m, memory: 128Mi }
   images:
-    authservice: "yampss/hipstershop-authservice:develop-424ff6df"
+    authservice: "yampss/hipstershop-authservice:develop-f4963d0e"
